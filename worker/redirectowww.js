@@ -1,10 +1,12 @@
 export default {
   async fetch(request) {
 
+    const redirectToRoot = true;
+
     const url = new URL(request.url);
     const host = url.hostname;
 
-    if (host.startsWith("www.")) {
+    if (redirectToRoot && host.startsWith("www.")) {
 
       const rootHost = host.replace(/^www\./, "");
 
@@ -19,7 +21,6 @@ export default {
         );
 
         if (res.ok) {
-
           return Response.redirect(
             "https://" +
             rootHost +
@@ -27,16 +28,13 @@ export default {
             url.search,
             301
           );
-
         }
 
       } catch (e) {
         console.log(e);
       }
-
     }
 
     return fetch(request);
-
   }
 };
